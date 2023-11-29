@@ -1,4 +1,4 @@
-﻿program DKR3;
+program DKR3;
 
 var
   a, b: real;
@@ -31,7 +31,7 @@ var
   h: real;
 begin
   h := (b - a) / n;
-  pogr := (h * h * h / 24) * (b - a);
+  pogr := (1/2*b*b*b*b+2/3*b*b*b-5/2*b*b+13*b) -(1/2*a*a*a*a+2/3*a*a*a-5/2*a*a+13*a);
 end;
 
 procedure case_menu;
@@ -72,3 +72,4 @@ end;
 begin
   case_menu;
 end.
+
