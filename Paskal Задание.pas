@@ -1,75 +1,66 @@
-program DKR3;
+Program DKR3;
+uses Crt;
+type
+  func = function(x: Real): Real;
 
-var
-  a, b: real;
-
-function Func(x: real): real;
+function f(x: real): real;
 begin
-  Func := 2 * x * x * x + 2 * x * x - 5 * x + 13;
+  f := 2 * x * x * x + 2 * x * x - 5 * x + 13;
 end;
 
-function left_method(a, b: real; n: integer): real;
+procedure left_method(a, b: Real; n: Integer; func: func; var s, pogr: real);
 var
-  h, x, sum: real;
-  i: integer;
+  h, x: Real;
+  i: Integer;
+  fa, fb: real; 
 begin
   h := (b - a) / n;
-  sum := 0;
   x := a;
-
-  for i := 1 to n do
-  begin
-    sum := sum + Func(x);
+  s := 0; 
+  for i := 0 to n - 1 do begin
+    s := s + func(x);
     x := x + h;
   end;
-
-  left_method := h * sum;
+  s := s * h;
+  fa := 1/2 * b * b * b * b + 2/3 * b * b * b - 5/2 * b * b + 13 * b; 
+  fb := 1/2 * a * a * a * a + 2/3 * a * a * a - 5/2 * a * a + 13 * a; 
+  pogr := fa - fb - s; 
 end;
 
-function pogr(a, b: real; n: integer): real;
 var
-  h: real;
-begin
-  h := (b - a) / n;
-  pogr := (1/2*b*b*b*b+2/3*b*b*b-5/2*b*b+13*b) -(1/2*a*a*a*a+2/3*a*a*a-5/2*a*a+13*a);
-end;
-
-procedure case_menu;
-var
-  k, n: integer;
-  result, error: real;
+  a, b: Real;
+  n: Integer;
+  s, pogr: Real;
+  Z: char;
 begin
   repeat
-    writeln('Дейтсвие 1: Введите пределы интегрирования');
-    writeln('Действие 2: Вычислить определенный интеграл');
-    writeln('Действие 3: Выход');
-    readln(k);
-
-    case k of
-      1: // первое действие 
+    ClrScr;
+    textcolor(Red);
+    writeln('1. Вычисление площади фигуры');
+    writeln('2. Выход');
+    write('Выберите действие: '); 
+    Z := ReadKey;
+    case Z of
+      '1':
       begin
-        write('Введите начальный предел: ');
-        readln(a);
-        write('Введите конечный предел: ');
-        readln(b);
-      end;
-      2: // второе действие
-      begin
-        write('Введите количество разбиений: ');
+        ClrScr;
+        Textcolor(Red);
+        writeln('Введите границы интегрирования: ');
+        readln(a, b);
+        Textcolor(Red);
+        writeln('Введите количество разделений: ');
         readln(n);
-
-        result := left_method(a, b, n);
-        error := pogr(a, b, n);
-
-        writeln('Результат вычисления: ', result:0:6);
-        writeln('Оценка погрешности: ', error:0:6);
+        left_method(a, b, n, f, s, pogr);
+        Textcolor(Yellow);
+        writeln('Площадь фигуры: ', s);
+        Textcolor(Yellow);
+        writeln('Погрешность: ', pogr);
+        readln;
       end;
+      '2': halt;
     end;
-
-  until k = 3; // третье действие (выход)
-end;
-
-begin
-  case_menu;
+    // Reset text color to default
+    Textcolor(White);
+  until Z = '2';
 end.
 
